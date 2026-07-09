@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бюро Находок — Super PRO Ultra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <style>
+        :root {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-background: #FEF7FF;
+            --md-sys-color-on-background: #1D1B20;
+            --md-sys-color-surface: #F7F2FA;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-on-surface: #1D1B20;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-inverse-surface: #313033;
+            --md-sys-color-inverse-on-surface: #F4EFF4;
+            --md-sys-color-error: #B3261E;
+            --md-motion-easing: cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        [data-theme="dark"] {
+            --md-sys-color-primary: #D0BCFF;
+            --md-sys-color-on-primary: #381E72;
+            --md-sys-color-primary-container: #4F378B;
+            --md-sys-color-on-primary-container: #EADDFF;
+            --md-sys-color-background: #141218;
+            --md-sys-color-on-background: #E6E1E5;
+            --md-sys-color-surface: #211F26;
+            --md-sys-color-surface-variant: #49454F;
+            --md-sys-color-on-surface: #E6E1E5;
+            --md-sys-color-on-surface-variant: #CAC4D0;
+            --md-sys-color-outline: #938F99;
+            --md-sys-color-inverse-surface: #E6E1E5;
+            --md-sys-color-inverse-on-surface: #313033;
+            --md-sys-color-error: #F2B8B5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; transition: background-color 0.3s var(--md-motion-easing), color 0.3s var(--md-motion-easing); }
+        body { background-color: var(--md-sys-color-background); color: var(--md-sys-color-on-background); padding-bottom: 120px; overflow-y: scroll; }
+        header { background-color: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 90; }
+        .brand { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 500; cursor: pointer; }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+        .icon-btn { background: none; border: none; color: var(--md-sys-color-on-surface-variant); cursor: pointer; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
+        .icon-btn:hover { background-color: var(--md-sys-color-surface-variant); }
+        .badge-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background-color: var(--md-sys-color-error); border-radius: 50%; display: none; }
+        .menu-container { position: relative; }
+        .dropdown-menu { position: absolute; top: 50px; right: 0; background-color: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-surface-variant); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); min-width: 210px; display: none; flex-direction: column; z-index: 100; overflow: hidden; transform: scale(0.95); opacity: 0; transition: transform 0.2s var(--md-motion-easing), opacity 0.2s var(--md-motion-easing); }
+        .dropdown-menu.show { display: flex; transform: scale(1); opacity: 1; }
+        .menu-item { padding: 14px 16px; display: flex; align-items: center; gap: 12px; background: none; border: none; color: var(--md-sys-color-on-surface); text-align: left; cursor: pointer; width: 100%; font-size: 14px; }
+        .menu-item:hover { background-color: var(--md-sys-color-surface-variant); }
+        main { max-width: 640px; margin: 24px auto; padding: 0 16px; position: relative; }
+        .view-section { animation: fadeIn 0.4s var(--md-motion-easing) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background-color: var(--md-sys-color-surface); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--md-sys-color-surface-variant); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .card h2 { margin-bottom: 16px; font-weight: 400; }
+        .input-group { margin-bottom: 16px; }
+        .input-field, select { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--md-sys-color-outline); background-color: transparent; color: var(--md-sys-color-on-background); font-size: 16px; outline: none; }
+        .input-field:focus, select:focus { border-color: var(--md-sys-color-primary); border-width: 2px; }
+        .btn { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border: none; padding: 12px 24px; border-radius: 100px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .btn:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .btn:active { transform: scale(0.98); }
+        .btn-text { background: none; border: none; color: var(--md-sys-color-primary); cursor: pointer; font-weight: 500; padding: 10px 20px; border-radius: 100px; }
+        .btn-text:hover { background-color: var(--md-sys-color-primary-container); }
+        .filters { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; }
+        .categories-chips { display: flex; gap: 6px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px; }
+        .chip { background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant); padding: 8px 16px; border-radius: 100px; cursor: pointer; border: none; font-weight: 500; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .chip.active { background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+        .post-card { background-color: var(--md-sys-color-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--md-sys-color-surface-variant); position: relative;}
+        .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 4px; }
+        .badge.found { background-color: #E8F5E9; color: #2E7D32; }
+        .badge.lost { background-color: #FFEBEE; color: #C62828; }
+        .badge.urgent { background-color: #FFF3E0; color: #E65100; animation: pulse 1.5s infinite; }
+        .badge.archived { background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-outline); }
+        @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #ccc; }
+        .avatar-lg { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: #ccc; }
+        .clickable-user { cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; }
+        .clickable-user:hover { background-color: var(--md-sys-color-surface-variant); }
+        .post-gallery { display: flex; gap: 8px; margin-top: 14px; overflow-x: auto; padding-bottom: 4px; }
+        .post-img { width: 90px; height: 90px; object-fit: cover; border-radius: 12px; background-color: #ccc; }
+        .post-meta-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+        .meta-tag { font-size: 11px; background: var(--md-sys-color-surface-variant); padding: 4px 8px; border-radius: 6px; color: var(--md-sys-color-on-surface-variant); }
+        .hashtag { color: var(--md-sys-color-primary); cursor: pointer; font-weight: 500; }
+        .hashtag:hover { text-decoration: underline; }
+        .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; border-top: 1px solid var(--md-sys-color-surface-variant); padding-top: 12px; flex-wrap: wrap; gap: 8px; }
+        .comments-section { margin-top: 12px; border-top: 1px dashed var(--md-sys-color-surface-variant); padding-top: 12px; display: none; }
+        .comments-section.show { display: block; }
+        .comment-item { font-size: 13px; margin-bottom: 6px; padding: 6px; background: var(--md-sys-color-background); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .comment-user-link { cursor: pointer; color: var(--md-sys-color-primary); font-weight: 500; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; }
+        .comment-user-link:hover { background-color: var(--md-sys-color-surface-variant); text-decoration: underline; }
+        .fab { position: fixed; bottom: 24px; right: 24px; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; border: none; z-index: 80; }
+        .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 200; padding: 16px; opacity: 0; transition: opacity 0.2s ease; }
+        .dialog-overlay.show { display: flex; opacity: 1; }
+        .dialog-box { background-color: var(--md-sys-color-surface); border-radius: 28px; padding: 24px; max-width: 340px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.24); transform: scale(0.9) translateY(10px); transition: transform 0.3s var(--md-motion-easing); }
+        .dialog-overlay.show .dialog-box { transform: scale(1) translateY(0); }
+        .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+        .snackbar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background-color: var(--md-sys-color-inverse-surface); color: var(--md-sys-color-inverse-on-surface); padding: 14px 24px; border-radius: 8px; font-size: 14px; z-index: 300; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.3s var(--md-motion-easing); }
+        .snackbar.show { transform: translateX(-50%) translateY(0); }
+        .checkbox-container { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+        .admin-table th, .admin-table td { padding: 10px; border-bottom: 1px solid var(--md-sys-color-surface-variant); text-align: left; }
+        .hidden { display: none !important; }
+        
+        /* Стили чата */
+        .chats-layout { display: grid; grid-template-columns: 200px 1fr; gap: 16px; height: 450px; }
+        .chats-sidebar { border-right: 1px solid var(--md-sys-color-surface-variant); overflow-y: auto; padding-right: 8px; }
+        .chat-dialog-item { padding: 10px; border-radius: 12px; cursor: pointer; margin-bottom: 4px; font-size: 14px; display: flex; align-items: center; gap: 8px;}
+        .chat-dialog-item:hover, .chat-dialog-item.active { background-color: var(--md-sys-color-surface-variant); }
+        .chat-window { display: flex; flex-direction: column; height: 100%; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 8px; background: var(--md-sys-color-background); border-radius: 12px; margin-bottom: 8px; }
+        .msg { margin-bottom: 8px; max-width: 80%; padding: 8px 12px; border-radius: 16px; font-size: 13px; line-height: 1.4; }
+        .msg.sent { background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); align-self: flex-end; margin-left: auto; border-bottom-right-radius: 4px; }
+        .msg.received { background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .map-mock { width: 100%; height: 120px; background: #cce2ff; border-radius: 12px; margin-top: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #0044aa; border: 2px dashed #3388ff; }
+        
+        /* Подвал */
+        footer { text-align: center; font-size: 12px; color: var(--md-sys-color-outline); padding: 16px 0; width: 100%; position: absolute; bottom: 0; left: 0; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand" onclick="navigateTo('feed')">
+            <span class="material-icons-round">travel_explore</span>
+            <span>Бюро Находок Ultra</span>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn id-logged-in hidden" onclick="navigateTo('chats')" title="Сообщения">
+                <span class="material-icons-round">chat</span>
+                <div class="badge-dot" id="chat-nav-badge"></div>
+            </button>
+            <button class="icon-btn" onclick="toggleTheme()"><span class="material-icons-round" id="theme-icon">dark_mode</span></button>
+            
+            <div class="menu-container id-logged-in hidden">
+                <button class="icon-btn" onclick="toggleMenu()" style="padding: 2px;"><img id="menu-avatar-img" class="avatar" src="" alt=""></button>
+                <div class="dropdown-menu" id="account-menu">
+                    <div style="padding: 14px 16px; border-bottom: 1px solid var(--md-sys-color-surface-variant); font-size: 13px; display:flex; align-items:center; gap:8px;">
+                        <img id="menu-dropdown-avatar" class="avatar" src="" alt="">
+                        <div>
+                            <b id="menu-username">test</b> <span id="menu-ticks" style="color:gold;">✔ 0</span>
+                        </div>
+                    </div>
+                    <button class="menu-item" onclick="navigateTo('feed')"><span class="material-icons-round">list</span>Лента</button>
+                    <button class="menu-item" onclick="navigateTo('chats')"><span class="material-icons-round">chat</span>Мои сообщения</button>
+                    <button class="menu-item" onclick="navigateTo('profile')"><span class="material-icons-round">manage_accounts</span>Мой аккаунт</button>
+                    <button class="menu-item id-admin-only hidden" onclick="navigateTo('admin')"><span class="material-icons-round">admin_panel_settings</span>Админ-панель</button>
+                    <button class="menu-item" onclick="logout()"><span class="material-icons-round">logout</span>Выйти</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- СЕКЦИЯ: АВТОРИЗАЦИЯ -->
+        <div id="view-auth" class="view-section card">
+            <h2 id="auth-title">Вход в систему</h2>
+            <div class="input-group"><input type="text" id="username" class="input-field" placeholder="Логин"></div>
+            <div class="input-group"><input type="password" id="password" class="input-field" placeholder="Пароль"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn" onclick="handleAuth()">Войти</button>
+                <button class="btn-text" id="toggle-auth-mode" onclick="switchAuthMode()">Создать аккаунт</button>
+            </div>
+        </div>
+
+        <!-- СЕКЦИЯ: ЛЕНТА -->
+        <div id="view-feed" class="view-section hidden">
+            <div class="search-bar" style="display:flex; gap:8px; margin-bottom:12px;">
+                <input type="text" id="search-input" class="input-field" placeholder="Поиск вещей, мест или #хэштегов..." oninput="renderPosts()">
+                <select id="distance-filter" style="width:140px;" onchange="renderPosts()">
+                    <option value="all">Любая дист.</option>
+                    <option value="1">В пределах 1км</option>
+                    <option value="5">В пределах 5км</option>
+                    <option value="10">В пределах 10км</option>
+                </select>
+            </div>
+            
+            <div class="filters">
+                <button class="chip active" id="filter-all" onclick="setFilter('all')">Все</button>
+                <button class="chip" id="filter-found" onclick="setFilter('found')">Найдено</button>
+                <button class="chip" id="filter-lost" onclick="setFilter('lost')">Потеряно</button>
+                <button class="chip" id="filter-favorites" onclick="setFilter('favorites')">★ Избранное</button>
+                <button class="chip" id="filter-my" onclick="setFilter('my')">Мои объявления</button>
+                <button class="chip" id="filter-archived" onclick="setFilter('archived')">Архив</button>
+            </div>
+
+            <div class="categories-chips" id="categories-container"></div>
+            <div id="posts-container"></div>
+        </div>
+
+        <!-- СЕКЦИЯ: ЛИЧНЫЕ СООБЩЕНИЯ -->
+        <div id="view-chats" class="view-section card hidden" style="max-width: 680px;">
+            <h2>Личные сообщения 💬</h2>
+            <div class="chats-layout">
+                <div class="chats-sidebar" id="chats-sidebar-list"></div>
+                <div class="chat-window">
+                    <div class="chat-messages" id="chat-messages-box">
+                        <p style="text-align:center; color:gray; margin-top:100px;">Выберите диалог для общения</p>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="chat-msg-input" class="input-field" placeholder="Напишите сообщение..." disabled>
+                        <button class="btn" id="chat-send-btn" onclick="sendDirectMessage()" disabled><span class="material-icons-round">send</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СЕКЦИЯ: НАСТРОЙКИ С ПРОФИЛЕМ -->
+        <div id="view-profile" class="view-section card hidden">
+            <h2>Настройки профиля</h2>
+            <div style="margin-bottom: 24px; display:flex; align-items:center; gap:16px;">
+                <img id="profile-avatar-preview" class="avatar-lg" src="" alt="">
+                <div>
+                    <h3 id="profile-display-name">Username</h3>
+                    <p style="color: gold; font-weight: 500;" id="profile-display-ticks">✔ 0</p>
+                    <input type="file" id="avatar-upload-input" accept="image/*" style="display:none;" onchange="handleAvatarUpload()">
+                    <button class="btn-text" style="font-size:12px; padding:4px 8px; margin-top:6px;" onclick="document.getElementById('avatar-upload-input').click()">Изменить аватар</button>
+                </div>
+            </div>
+
+            <div class="card" style="padding:12px; background:var(--md-sys-color-surface-variant); margin-bottom:16px;">
+                <h4>Реквизиты для «Спасибо» (Донаты) 🎁</h4>
+                <input type="text" id="user-wallet" class="input-field" style="margin-top:6px;" placeholder="Карта или номер телефона">
+            </div>
+
+            <div class="card" style="padding:12px; background:var(--md-sys-color-surface-variant); margin-bottom:16px;">
+                <h4>Подписки на уведомления по категориям 🔔</h4>
+                <div id="subs-checkboxes" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;"></div>
+            </div>
+
+            <div class="input-group"><input type="text" id="edit-username" class="input-field" placeholder="Логин"></div>
+            <div class="input-group"><input type="password" id="edit-password" class="input-field" placeholder="Пароль"></div>
+            
+            <div style="display: flex; gap: 8px; justify-content: space-between; margin-top:24px;">
+                <button class="btn-text" style="color:var(--md-sys-color-error);" onclick="exportUserData()">📥 Экспорт данных (TXT)</button>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-text" onclick="navigateTo('feed')">Отмена</button>
+                    <button class="btn" onclick="saveProfileSettings()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- СЕКЦИЯ: ЧУЖОЙ ПРОФИЛЬ -->
+        <div id="view-user-profile" class="view-section hidden">
+            <div class="card">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <img id="view-user-avatar" class="avatar-lg" src="" alt="">
+                        <div>
+                            <h2 id="view-user-title" style="margin:0;">Имя</h2>
+                            <p style="color: gold; font-weight: bold;" id="view-user-ticks">✔ 0</p>
+                            <p id="view-user-wallet-info" style="font-size:12px; margin-top:4px; opacity:0.8;"></p>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <button class="btn" id="profile-write-msg-btn">💬 Написать ЛС</button>
+                        <button class="btn-text" style="color:var(--md-sys-color-error); font-size:12px;" id="profile-block-btn">🚫 Заблокировать</button>
+                    </div>
+                </div>
+            </div>
+            <h3 style="margin-bottom:16px; font-weight:400;">Объявления пользователя:</h3>
+            <div id="user-posts-container"></div>
+        </div>
+
+        <!-- СЕКЦИЯ: АДМИН ПАНЕЛЬ -->
+        <div id="view-admin" class="view-section hidden">
+            <div class="card"><h2>Панель Администратора 🛡️</h2><div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; margin-top:12px;" id="admin-stats"></div></div>
+            <div class="card"><h3>Управление пользователями</h3><table class="admin-table"><thead><tr><th>Имя</th><th>Рейтинг</th><th>Действия</th></tr></thead><tbody id="admin-users-list"></tbody></table></div>
+            <div class="card"><h3>Жалобы на объявления</h3><div id="admin-reports-list"></div></div>
+        </div>
+
+        <!-- СЕКЦИЯ: СОЗДАНИЕ ОБЪЯВЛЕНИЯ -->
+        <div id="view-create-post" class="view-section card hidden">
+            <h2>Новое объявление</h2>
+            <div class="segmented-control" style="display:flex; border:1px solid var(--md-sys-color-outline); border-radius:12px; overflow:hidden; margin-bottom:16px;">
+                <button class="segment-btn active" style="flex:1; padding:12px;" id="type-found" onclick="setPostType('found')">Нашел</button>
+                <button class="segment-btn" style="flex:1; padding:12px;" id="type-lost" onclick="setPostType('lost')">Потерял</button>
+            </div>
+            <label class="checkbox-container"><input type="checkbox" id="post-urgent"><span style="color:#E65100; font-weight:500;">⚡ СРОЧНО</span></label>
+            <div class="input-group">
+                <select id="post-category">
+                    <option value="Электроника">📱 Электроника</option>
+                    <option value="Документы">📄 Документы</option>
+                    <option value="Ключи">🔑 Ключи</option>
+                    <option value="Одежда">👕 Одежда</option>
+                    <option value="Другое" selected>📦 Другое</option>
+                </select>
+            </div>
+            <div class="input-group"><input type="text" id="post-title" class="input-field" placeholder="Название (например: Связка ключей #брелок)"></div>
+            <div class="input-group"><textarea id="post-desc" class="input-field" rows="3" placeholder="Описание, используйте #хэштеги для тегов..."></textarea></div>
+            <div class="input-group"><input type="text" id="post-location" class="input-field" placeholder="Где нашли / потеряли"></div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                <input type="number" step="0.0001" id="post-lat" class="input-field" placeholder="Координаты: Широта (Lat)">
+                <input type="number" step="0.0001" id="post-lng" class="input-field" placeholder="Координаты: Долгота (Lng)">
+            </div>
+
+            <div class="input-group"><input type="text" id="post-reward" class="input-field" placeholder="Вознаграждение (необязательно)"></div>
+            <div class="input-group">
+                <input type="file" id="post-images" multiple accept="image/*" onchange="previewImages()">
+                <div id="image-previews" style="display:flex; gap:8px; margin-top:8px;"></div>
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <button class="btn-text" onclick="navigateTo('feed')">Отмена</button>
+                <button class="btn" onclick="submitPost()">Опубликовать</button>
+            </div>
+        </div>
+    </main>
+
+    <button class="fab hidden id-logged-in" onclick="navigateTo('create-post')"><span class="material-icons-round">add</span></button>
+
+    <div class="dialog-overlay" id="custom-dialog">
+        <div class="dialog-box"><h3 id="dialog-title"></h3><p id="dialog-message" style="margin-top:8px;"></p><div class="dialog-actions" id="dialog-buttons" style="margin-top:20px;"></div></div>
+    </div>
+    <div class="snackbar" id="snackbar"></div>
+
+    <!-- Маленькая надпись внизу сайта -->
+    <footer>made by galik &lt;3</footer>
+
+    <script>
+        const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23E7E0EC'/><circle cx='50' cy='35' r='20' fill='%2379747E'/><path d='M15,85 C15,60 85,60 85,85' fill='%2379747E'/></svg>";
+        const CATEGORIES = ['Электроника', 'Документы', 'Ключи', 'Одежда', 'Другое'];
+
+        let users = JSON.parse(localStorage.getItem('lost_users_v6')) || {
+            'test': { password: '1', ticks: 5, avatar: DEFAULT_AVATAR, wallet: '', subs: [], blacklist: [] },
+            'admin': { password: 'admin', ticks: 99, avatar: DEFAULT_AVATAR, role: 'admin', wallet: '', subs: [], blacklist: [] },
+            'Мария': { password: '123', ticks: 12, avatar: DEFAULT_AVATAR, wallet: 'Карта Сбер 4432...', subs: [], blacklist: [] }
+        };
+        
+        let posts = JSON.parse(localStorage.getItem('lost_posts_v6')) || [
+            { id: 1, author: 'Мария', type: 'found', category: 'Ключи', urgent: true, reward: 'Шоколадка', reports: 0, status: 'active', comments: [], title: 'Ключи с #форд брелоком', desc: 'Нашла связку в #парк на лавке.', location: 'Парк', lat: 43.2389, lng: 76.8897, images: [] }
+        ];
+
+        let chats = JSON.parse(localStorage.getItem('lost_chats_v6')) || [];
+        let favorites = JSON.parse(localStorage.getItem('lost_favs_v6')) || [];
+
+        let currentUser = null;
+        let isRegisterMode = false;
+        let currentPostType = 'found';
+        let currentFilter = 'all';
+        let currentCategoryFilter = 'Все';
+        let activeChatUser = null;
+        let uploadedImagesBase64 = [];
+
+        function showSnackbar(text) {
+            const snack = document.getElementById('snackbar'); snack.innerText = text; snack.classList.add('show');
+            setTimeout(() => snack.classList.remove('show'), 3500);
+        }
+
+        function openCustomDialog(title, text, buttons = []) {
+            document.getElementById('dialog-title').innerText = title; document.getElementById('dialog-message').innerText = text;
+            const container = document.getElementById('dialog-buttons'); container.innerHTML = '';
+            if (!buttons.length) buttons = [{ text: 'OK', action: closeDialog }];
+            buttons.forEach(btn => {
+                const b = document.createElement('button'); b.className = 'btn-text'; b.innerText = btn.text;
+                b.onclick = () => { btn.action(); closeDialog(); }; container.appendChild(b);
+            });
+            document.getElementById('custom-dialog').classList.add('show');
+        }
+        function closeDialog() { document.getElementById('custom-dialog').classList.remove('show'); }
+        function toggleTheme() { const body = document.body; const icon = document.getElementById('theme-icon'); if (body.getAttribute('data-theme') === 'dark') { body.removeAttribute('data-theme'); icon.innerText = 'dark_mode'; } else { body.setAttribute('data-theme', 'dark'); icon.innerText = 'light_mode'; } }
+        function toggleMenu() { document.getElementById('account-menu').classList.toggle('show'); }
+        window.addEventListener('click', (e) => { if (!e.target.closest('.menu-container')) document.getElementById('account-menu').classList.remove('show'); });
+
+        function navigateTo(viewId, extraData = null) {
+            const sections = ['auth', 'feed', 'profile', 'create-post', 'user-profile', 'admin', 'chats'];
+            sections.forEach(s => document.getElementById(`view-${s}`).classList.add('hidden'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+
+            if (viewId === 'profile') fillProfileData();
+            if (viewId === 'feed') { renderCategories(); renderPosts(); }
+            if (viewId === 'user-profile') viewOtherUserProfile(extraData);
+            if (viewId === 'admin') renderAdminPanel();
+            if (viewId === 'chats') { renderChatsSidebar(); if(extraData) openChatWith(extraData); }
+        }
+
+        function switchAuthMode() { isRegisterMode = !isRegisterMode; document.getElementById('auth-title').innerText = isRegisterMode ? 'Регистрация' : 'Вход'; document.getElementById('toggle-auth-mode').innerText = isRegisterMode ? 'Вход' : 'Регистрация'; }
+
+        function handleAuth() {
+            const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value.trim();
+            if (!u || !p) return showSnackbar('Заполните данные.');
+            if (isRegisterMode) {
+                if (users[u]) return showSnackbar('Логин занят');
+                users[u] = { password: p, ticks: 0, avatar: DEFAULT_AVATAR, wallet:'', subs:[], blacklist:[] };
+                saveData(); switchAuthMode(); showSnackbar('Готово, входите!');
+            } else {
+                if (users[u] && users[u].password === p) {
+                    currentUser = u;
+                    document.querySelectorAll('.id-logged-in').forEach(el => el.classList.remove('hidden'));
+                    document.querySelectorAll('.id-admin-only').forEach(el => users[u].role === 'admin' ? el.classList.remove('hidden') : el.classList.add('hidden'));
+                    updateMenuProfile(); navigateTo('feed'); setupSimulatedNotifications();
+                } else showSnackbar('Неверные данные');
+            }
+        }
+
+        function logout() { currentUser = null; document.querySelectorAll('.id-logged-in, .id-admin-only').forEach(el => el.classList.add('hidden')); navigateTo('auth'); }
+        function updateMenuProfile() { if(currentUser) { document.getElementById('menu-username').innerText = currentUser; document.getElementById('menu-ticks').innerText = `✔ ${users[currentUser].ticks}`; const av = users[currentUser].avatar || DEFAULT_AVATAR; document.getElementById('menu-avatar-img').src = av; document.getElementById('menu-dropdown-avatar').src = av; } }
+        function handleAvatarUpload() { const file = document.getElementById('avatar-upload-input').files[0]; if (!file) return; const r = new FileReader(); r.onload = (e) => { users[currentUser].avatar = e.target.result; saveData(); updateMenuProfile(); fillProfileData(); }; r.readAsDataURL(file); }
+
+        function fillProfileData() {
+            document.getElementById('profile-display-name').innerText = currentUser;
+            document.getElementById('profile-display-ticks').innerText = `Рейтинг: ✔ ${users[currentUser].ticks}`;
+            document.getElementById('edit-username').value = currentUser;
+            document.getElementById('edit-password').value = users[currentUser].password;
+            document.getElementById('user-wallet').value = users[currentUser].wallet || '';
+            document.getElementById('profile-avatar-preview').src = users[currentUser].avatar || DEFAULT_AVATAR;
+            
+            const subsBox = document.getElementById('subs-checkboxes'); subsBox.innerHTML = '';
+            CATEGORIES.forEach(c => {
+                const isSubbed = (users[currentUser].subs || []).includes(c);
+                subsBox.innerHTML += `<label><input type="checkbox" value="${c}" ${isSubbed?'checked':''} onchange="toggleCategorySub('${c}')"> ${c}</label>`;
+            });
+        }
+
+        function toggleCategorySub(cat) {
+            if(!users[currentUser].subs) users[currentUser].subs = [];
+            const idx = users[currentUser].subs.indexOf(cat);
+            if(idx > -1) users[currentUser].subs.splice(idx, 1); else users[currentUser].subs.push(cat);
+            saveData();
+        }
+
+        function saveProfileSettings() {
+            const n = document.getElementById('edit-username').value.trim(); const p = document.getElementById('edit-password').value.trim();
+            if(!n || !p) return;
+            users[currentUser].password = p; users[currentUser].wallet = document.getElementById('user-wallet').value;
+            if (n !== currentUser && !users[n]) {
+                users[n] = users[currentUser]; delete users[currentUser]; currentUser = n;
+            }
+            saveData(); updateMenuProfile(); navigateTo('feed'); showSnackbar('Профиль сохранен!');
+        }
+
+        function exportUserData() {
+            const myPosts = posts.filter(p => p.author === currentUser);
+            const text = `Экспорт данных юзера ${currentUser}\nРейтинг: ${users[currentUser].ticks}\n\nОбъявления:\n` + myPosts.map(p => `-[${p.type}] ${p.title} (${p.location})`).join('\n');
+            const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `profile_${currentUser}.txt`; a.click();
+        }
+
+        function viewOtherUserProfile(uName) {
+            const u = users[uName] || { ticks: 0, avatar: DEFAULT_AVATAR, wallet: '' };
+            document.getElementById('view-user-title').innerText = uName;
+            document.getElementById('view-user-ticks').innerText = `Рейтинг: ✔ ${u.ticks}`;
+            document.getElementById('view-user-avatar').src = u.avatar || DEFAULT_AVATAR;
+            document.getElementById('view-user-wallet-info').innerText = u.wallet ? `🎁 Карта/Кошелек: ${u.wallet}` : 'Реквизиты не указаны';
+            
+            document.getElementById('profile-write-msg-btn').onclick = () => navigateTo('chats', uName);
+            
+            const blockBtn = document.getElementById('profile-block-btn');
+            const isBlocked = (users[currentUser].blacklist || []).includes(uName);
+            blockBtn.innerText = isBlocked ? '✅ Разблокировать' : '🚫 Заблокировать';
+            blockBtn.onclick = () => {
+                if(!users[currentUser].blacklist) users[currentUser].blacklist = [];
+                if(isBlocked) users[currentUser].blacklist = users[currentUser].blacklist.filter(x => x !== uName);
+                else users[currentUser].blacklist.push(uName);
+                saveData(); viewOtherUserProfile(uName); showSnackbar('Список блокировок обновлен');
+            };
+
+            const container = document.getElementById('user-posts-container'); container.innerHTML = '';
+            posts.filter(p => p.author === uName).forEach(p => container.appendChild(generatePostCardHTML(p, false)));
+        }
+
+        // ЛОГИКА ЛИЧНЫХ СООБЩЕНИЙ (ЧАТЫ)
+        function renderChatsSidebar() {
+            const list = document.getElementById('chats-sidebar-list'); list.innerHTML = '';
+            let dialogUsers = new Set();
+            chats.forEach(m => {
+                if(m.sender === currentUser) dialogUsers.add(m.receiver);
+                if(m.receiver === currentUser) dialogUsers.add(m.sender);
+            });
+            if(dialogUsers.size === 0) list.innerHTML = '<p style="font-size:12px; color:gray; padding:8px;">Нет чатов</p>';
+            dialogUsers.forEach(u => {
+                const item = document.createElement('div');
+                item.className = `chat-dialog-item ${activeChatUser === u ? 'active' : ''}`;
+                item.innerHTML = `<img src="${users[u]?.avatar || DEFAULT_AVATAR}" class="avatar" style="width:24px; height:24px;"> <b>${u}</b>`;
+                item.onclick = () => openChatWith(u);
+                list.appendChild(item);
+            });
+            document.getElementById('chat-nav-badge').style.display = 'none';
+        }
+
+        function openChatWith(uName) {
+            activeChatUser = uName;
+            renderChatsSidebar();
+            document.getElementById('chat-msg-input').disabled = false;
+            document.getElementById('chat-send-btn').disabled = false;
+            
+            const box = document.getElementById('chat-messages-box'); box.innerHTML = '';
+            const filteredMsgs = chats.filter(m => (m.sender === currentUser && m.receiver === uName) || (m.sender === uName && m.receiver === currentUser));
+            
+            if(!filteredMsgs.length) box.innerHTML = `<p style="text-align:center; color:gray; font-size:12px; margin-top:20px;">История сообщений пуста. Начните общение первым!</p>`;
+            filteredMsgs.forEach(m => {
+                const div = document.createElement('div');
+                div.className = `msg ${m.sender === currentUser ? 'sent' : 'received'}`;
+                div.innerText = m.text;
+                box.appendChild(div);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendDirectMessage() {
+            const inp = document.getElementById('chat-msg-input'); const text = inp.value.trim(); if(!text || !activeChatUser) return;
+            chats.push({ sender: currentUser, receiver: activeChatUser, text: text, time: Date.now() });
+            saveData(); inp.value = ''; openChatWith(activeChatUser);
+        }
+
+        // ПОДДЕРЖКА ХЭШТЕГОВ И ТЕКСТА
+        function parseTextWithHashtags(text) {
+            return text.replace(/#\w+[а-яА-Я\w]+/g, (match) => `<span class="hashtag" onclick="searchByHashtag('${match}')">${match}</span>`);
+        }
+        function searchByHashtag(tag) { document.getElementById('search-input').value = tag; renderPosts(); }
+
+        // СОЗДАНИЕ И ВЫВОД ПОСТОВ
+        function setPostType(t) { currentPostType = t; document.getElementById('type-found').classList.toggle('active', t==='found'); document.getElementById('type-lost').classList.toggle('active', t==='lost'); }
+        function previewImages() { const files = document.getElementById('post-images').files; const preview = document.getElementById('image-previews'); preview.innerHTML = ''; uploadedImagesBase64 = []; for(let f of files) { const r = new FileReader(); r.onload=(e)=>{ uploadedImagesBase64.push(e.target.result); preview.innerHTML+=`<img src="${e.target.result}" class="post-img">`; }; r.readAsDataURL(f); } }
+        
+        function submitPost() {
+            const title = document.getElementById('post-title').value.trim(); const desc = document.getElementById('post-desc').value.trim(); const loc = document.getElementById('post-location').value.trim();
+            if(!title || !desc || !loc) return showSnackbar('Заполните обязательные поля.');
+            const cat = document.getElementById('post-category').value;
+            
+            posts.unshift({
+                id: Date.now(), author: currentUser, type: currentPostType, category: cat,
+                urgent: document.getElementById('post-urgent').checked, status: 'active',
+                reward: document.getElementById('post-reward').value.trim() || null, reports: 0, comments: [], title: title, desc: desc, location: loc,
+                lat: parseFloat(document.getElementById('post-lat').value) || null, lng: parseFloat(document.getElementById('post-lng').value) || null,
+                images: uploadedImagesBase64
+            });
+            saveData(); navigateTo('feed'); showSnackbar('Объявление успешно создано!');
+            document.getElementById('post-title').value = ''; document.getElementById('post-desc').value = ''; document.getElementById('post-images').value = ''; document.getElementById('post-lat').value=''; document.getElementById('post-lng').value='';
+            Object.keys(users).forEach(u => { if(u !== currentUser && (users[u].subs || []).includes(cat)) { setTimeout(()=>showSnackbar(`🔔 Оповещение для ${u}: в категории ${cat} новый post!`), 2000); } });
+        }
+
+        function setFilter(f) { currentFilter = f; document.querySelectorAll('.filters .chip').forEach(c => c.classList.toggle('active', c.id === `filter-${f}`)); renderPosts(); }
+        function renderCategories() { const c = document.getElementById('categories-container'); c.innerHTML = (currentCategoryFilter==='Все'?'<button class="chip active">Все</button>':'<button class="chip" onclick="currentCategoryFilter=\'Все\'; renderCategories(); renderPosts();">Все</button>') + CATEGORIES.map(cat => `<button class="chip ${currentCategoryFilter===cat?'active':''}" onclick="currentCategoryFilter='${cat}'; renderCategories(); renderPosts();">${cat}</button>`).join(''); }
+
+        function generatePostCardHTML(p, clickable = true) {
+            const isBlocked = (users[currentUser]?.blacklist || []).includes(p.author);
+            const card = document.createElement('div'); card.className = 'post-card';
+            if(isBlocked) { card.innerHTML = `<p style="font-size:12px; color:gray; text-align:center;">Пост от заблокированного пользователя ${p.author}</p>`; return card; }
+            
+            const isFav = favorites.includes(p.id);
+            let imgs = p.images ? p.images.map(img => `<img src="${img}" class="post-img">`).join('') : '';
+            const statusLabel = p.status === 'archived' ? '<span class="badge archived">В архиве (Найдено)</span>' : `<span class="badge ${p.type}">${p.type==='found'?'Найдено':'Потеряно'}</span>`;
+            
+            // Генерация HTML комментариев с возможностью клика по имени
+            const commentsHtml = p.comments.map(c => {
+                const userTicks = users[c.user]?.ticks || 0;
+                return `
+                    <div class="comment-item">
+                        <div>
+                            <span class="comment-user-link" onclick="navigateTo('user-profile', '${c.user}')">
+                                <b>${c.user}</b> 
+                                <span style="color:gold; font-size:11px;">✔ ${userTicks}</span>
+                            </span>: ${c.text}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            card.innerHTML = `
+                <div class="post-header">
+                    <div style="display:flex; gap:4px;">${statusLabel} ${p.urgent?'<span class="badge urgent">⚡ СРОЧНО</span>':''}</div>
+                    <div class="clickable-user" onclick="${clickable?`navigateTo('user-profile', '${p.author}')`:''}">
+                        <b>${p.author}</b> <span style="color:gold;">✔ ${users[p.author]?.ticks || 0}</span>
+                    </div>
+                </div>
+                <h3>${parseTextWithHashtags(p.title)}</h3>
+                <p style="margin-top:6px; font-size:14px;">${parseTextWithHashtags(p.desc)}</p>
+                <p style="font-size:12px; color:gray; margin-top:8px;"><span class="material-icons-round" style="font-size:14px">place</span> ${p.location}</p>
+                ${p.lat ? `<button class="btn-text" style="padding:2px; font-size:11px;" onclick="toggleMapMock(${p.id})">📍 Показать на карте</button><div class="map-mock hidden" id="map-${p.id}">🗺️ Карта: Широта ${p.lat} / Долгота ${p.lng}</div>` : ''}
+                <div class="post-meta-tags"><span class="meta-tag">📦 ${p.category}</span> ${p.reward?`<span class="meta-tag" style="background:#fff9c4">🎁 ${p.reward}</span>`:''}</div>
+                <div class="post-gallery">${imgs}</div>
+                <div class="post-actions">
+                    <div style="display:flex; gap:6px;">
+                        ${p.author !== currentUser ? `<button class="btn" style="font-size:12px; padding:6px 12px;" onclick="startDealProcess('${p.author}', ${p.id})">Откликнуться</button>` : p.status !== 'archived' ? `<button class="btn-text" style="color:green; font-size:12px;" onclick="archivePost(${p.id})">В архив (Решено)</button>` : ''}
+                        <button class="btn-text" style="font-size:12px;" onclick="document.getElementById('comments-${p.id}').classList.toggle('show')">💬 (${p.comments.length})</button>
+                    </div>
+                    <div>
+                        <button class="icon-btn" onclick="toggleFavorite(${p.id})"><span class="material-icons-round" style="${isFav?'color:red':''}">${isFav?'favorite':'favorite_border'}</span></button>
+                        ${p.author !== currentUser ? `<button class="icon-btn" onclick="reportPost(${p.id})"><span class="material-icons-round">flag</span></button>` : ''}
+                    </div>
+                </div>
+                <div class="comments-section" id="comments-${p.id}">
+                    <div style="max-height:150px; overflow-y:auto; margin-bottom:6px;">${commentsHtml}</div>
+                    <div style="display:flex; gap:4px;"><input type="text" id="c-inp-${p.id}" class="input-field" style="padding:6px;" placeholder="Ваш коммент..."><button class="btn" style="padding:6px 12px;" onclick="addComment(${p.id})">➕</button></div>
+                </div>
+            `;
+            return card;
+        }
+
+        function toggleMapMock(id) { document.getElementById(`map-${id}`).classList.toggle('hidden'); }
+        function archivePost(id) { const p = posts.find(x=>x.id===id); if(p) p.status = 'archived'; saveData(); renderPosts(); showSnackbar('Пост перенесен в архив как выполненный!'); }
+        function toggleFavorite(id) { const i = favorites.indexOf(id); if(i>-1) favorites.splice(i,1); else favorites.push(id); localStorage.setItem('lost_favs_v6', JSON.stringify(favorites)); renderPosts(); }
+        function reportPost(id) { const p = posts.find(x=>x.id===id); if(p) { p.reports=(p.reports||0)+1; showSnackbar('Жалоба принята модерацией'); if(p.reports>=3 && currentUser!=='admin') renderPosts(); } }
+        function addComment(id) { const inp = document.getElementById(`c-inp-${id}`); const t = inp.value.trim(); if(!t) return; const p = posts.find(x=>x.id===id); p.comments.push({user: currentUser, text: t}); saveData(); renderPosts();
+        if(p.author !== currentUser) showSnackbar(`💬 Уведомление: ${currentUser} прокомментировал ваш пост "${p.title}"`); }
+
+        function renderPosts() {
+            const container = document.getElementById('posts-container'); const q = document.getElementById('search-input').value.toLowerCase();
+            const dist = document.getElementById('distance-filter').value;
+            container.innerHTML = '';
+            const filtered = posts.filter(p => {
+                if(currentUser !== 'admin' && (p.reports||0)>=3) return false;
+                let mF = currentFilter==='all' && p.status==='active';
+                if(currentFilter==='found'||currentFilter==='lost') mF = p.type===currentFilter && p.status==='active';
+                if(currentFilter==='favorites') mF = favorites.includes(p.id);
+                if(currentFilter==='my') mF = p.author===currentUser;
+                if(currentFilter==='archived') mF = p.status==='archived';
+                const mC = currentCategoryFilter==='Все' || p.category === currentCategoryFilter;
+                const mS = p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.location.toLowerCase().includes(q);
+                let mD = true; if(dist!=='all' && p.lat) { mD = (Math.random() * 12) <= parseInt(dist); }
+                return mF && mC && mS && mD;
+            });
+            filtered.forEach(p => container.appendChild(generatePostCardHTML(p)));
+        }
+
+        // АДМИН-ПАНЕЛЬ
+        function renderAdminPanel() {
+            document.getElementById('admin-stats').innerHTML = `<div style="background:var(--md-sys-color-surface-variant); padding:10px; border-radius:8px;">Постов: <b>${posts.length}</b></div><div style="background:var(--md-sys-color-surface-variant); padding:10px; border-radius:8px;">Юзеров: <b>${Object.keys(users).length}</b></div>`;
+            const list = document.getElementById('admin-users-list'); list.innerHTML = '';
+            Object.keys(users).forEach(u => {
+                list.innerHTML += `<tr><td><b>${u}</b></td><td>✔ ${users[u].ticks}</td><td><button class="btn-text" style="padding:2px 6px;" onclick="adjustUserTicks('${u}',1)">+1</button><button class="btn-text" style="padding:2px 6px; color:red;" onclick="adjustUserTicks('${u}',-1)">-1</button></td></tr>`;
+            });
+        }
+        function adjustUserTicks(u, act) { users[u].ticks = Math.max(0, users[u].ticks + act); saveData(); renderAdminPanel(); }
+
+        function startDealProcess(auth, id) { openCustomDialog('Закрытие сделки', `Начислить балл честности (✔) для ${auth}?`, [{text:'Нет', action:()=>finalizeDeal(id)}, {text:'Да', action:()=>{ users[auth].ticks++; finalizeDeal(id); }}]); }
+        function finalizeDeal(id) { posts = posts.filter(x=>x.id!==id); saveData(); renderPosts(); showSnackbar('Сделка успешно завершена!'); }
+        function saveData() { localStorage.setItem('lost_users_v6', JSON.stringify(users)); localStorage.setItem('lost_posts_v6', JSON.stringify(posts)); localStorage.setItem('lost_chats_v6', JSON.stringify(chats)); }
+
+        // ЭМУЛЯЦИЯ ПОЛУЧЕНИЯ СЛУЧАЙНЫХ ЛС
+        function setupSimulatedNotifications() {
+            setTimeout(() => {
+                if(currentUser && currentUser !== 'Мария') {
+                    chats.push({ sender: 'Мария', receiver: currentUser, text: 'Привет! Насчет вещи в объявлении, вы её нашли?', time: Date.now() });
+                    document.getElementById('chat-nav-badge').style.display = 'block';
+                    showSnackbar('📩 Новое личное сообщение от Мария!');
+                    saveData(); if(activeChatUser==='Мария') openChatWith('Мария');
+                }
+            }, 8000);
+        }
+    </script>
+</body>
+</html>
